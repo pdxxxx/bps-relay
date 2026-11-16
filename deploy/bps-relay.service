@@ -1,0 +1,22 @@
+[Unit]
+Description=BPS WebSocket transport relay
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+DynamicUser=yes
+EnvironmentFile=/etc/bps-relay/relay.env
+ExecStart=/opt/bps-relay/bps-relay
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=15
+PrivateTmp=yes
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

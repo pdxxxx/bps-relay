@@ -1,0 +1,26 @@
+# Replace relay.example.com and both certificate paths before enabling.
+server {
+    listen 443 ssl;
+    server_name relay.example.com;
+    ssl_certificate /path/to/fullchain.pem;
+    ssl_certificate_key /path/to/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    location = /relay {
+        proxy_pass http://127.0.0.1:19361;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_buffering off;
+        proxy_request_buffering off;
+        proxy_read_timeout 600s;
+        proxy_send_timeout 600s;
+        access_log off;
+    }
+    location = /healthz {
+        proxy_pass http://127.0.0.1:19361;
+        access_log off;
+    }
+    location / { return 404; }
+}
