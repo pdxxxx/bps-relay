@@ -20,6 +20,9 @@ func allowedTarget(method, raw string) bool {
 		}
 		return method == "GET" && u.Path == "/basispoints/api/responses/access" && (u.RawQuery == "include_models=true" || u.RawQuery == "")
 	case "chatgpt.com":
+		if method == "POST" && u.Path == "/backend-api/wham/rate-limit-reset-credits/consume" {
+			return u.RawQuery == ""
+		}
 		return method == "GET" && (u.Path == "/backend-api/wham/usage" || u.Path == "/backend-api/wham/rate-limit-reset-credits") && u.RawQuery == ""
 	case "auth.openai.com":
 		return method == "POST" && u.Path == "/oauth/token" && u.RawQuery == ""
